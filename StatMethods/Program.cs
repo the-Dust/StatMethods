@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StatMethods.MedianFilters;
 using StatMethods.Parsers;
-using StatMethods.MedianFilters;
 using StatMethods.Winsorizators;
+using System;
 
 namespace StatMethods
 {
@@ -55,13 +51,15 @@ namespace StatMethods
 
                 DataParser parser = new DataParser();
 
+                double[] parsedArray = null;
+
                 do
                 {
                     string inputArray = Console.ReadLine();
-                    parser.ParseArray(inputArray);
+                    parsedArray = parser.ParseArray(inputArray);
                     Console.WriteLine(parser.ValidationMessage);
                 }
-                while (parser.ValidationMessage != "");
+                while (parsedArray == null);
 
                 
                 if (operationNumber == 1)
@@ -69,28 +67,29 @@ namespace StatMethods
                 else if (operationNumber == 2)
                     Console.WriteLine(enterMedianParameter);
                 Console.WriteLine(parameterCharachter);
-                
+
+                int parsedParameter = -1;
 
                 do
                 {
                     string inputParameter = Console.ReadLine();
-                    parser.ParseParameter(inputParameter);
+                    parsedParameter = parser.ParseParameter(inputParameter, parsedArray.Length);
                     Console.WriteLine(parser.ValidationMessage);
                 }
-                while (parser.ValidationMessage != "");
+                while (parsedParameter == -1);
 
                 Console.WriteLine(resultOfTask);
 
                 if (operationNumber == 1)
                 {
                     Winsorizator wins = new Winsorizator();
-                    double output = wins.FindVinsorizedMedium(parser.ParsedArray, parser.Parameter);
+                    double output = wins.FindWinsorizedMedium(parsedArray, parsedParameter);
                     Console.WriteLine(output);
                 }
                 else
                 {
                     MedianFilter filter = new MedianFilter();
-                    double[] output = filter.GetMedianFiltration(parser.ParsedArray, parser.Parameter);
+                    double[] output = filter.GetMedianFiltration(parsedArray, parsedParameter);
                     Console.WriteLine(string.Join(" ", output));
                 }
 
@@ -126,9 +125,9 @@ namespace StatMethods
 
             Console.WriteLine("Демонстрационные значения винсоризации на заданных массивах " +
                 Environment.NewLine + "(m - степень винсоризации)");
-            Console.WriteLine($"Массив [2, 3, 17, 6, 1] и m = 2: {wins.FindVinsorizedMedium(demoFirst,2)}");
-            Console.WriteLine($"Массив [17, 38, 9, 63, 41, 15] и m = 4: {wins.FindVinsorizedMedium(demoSecond, 4)}");
-            Console.WriteLine($"Массив [7, 82, 33, 33, 33, 1, 56] и m = 2: {wins.FindVinsorizedMedium(demoThird, 2)}");
+            Console.WriteLine($"Массив [2, 3, 17, 6, 1] и m = 2: {wins.FindWinsorizedMedium(demoFirst,2)}");
+            Console.WriteLine($"Массив [17, 38, 9, 63, 41, 15] и m = 4: {wins.FindWinsorizedMedium(demoSecond, 4)}");
+            Console.WriteLine($"Массив [7, 82, 33, 33, 33, 1, 56] и m = 2: {wins.FindWinsorizedMedium(demoThird, 2)}");
         }
     }
 }

@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace StatMethods.Parsers
 {
     class DataParser
     {
-        public double[] ParsedArray { get; private set; } = new double[0];
-        //Additional parameter to work with array. It should be grater than 2 and smaller
-        //than array.Length, see below
-        public int Parameter { get { return parameter; } }
         public string ValidationMessage { get; private set; } = "";
-
-        private int parameter;
 
         private static string tryAgain = $"{Environment.NewLine}Попробуйте ввести еще раз. {Environment.NewLine}";
 
@@ -31,25 +23,33 @@ namespace StatMethods.Parsers
         private string rangeTemplate = "Размер окна не может быть меньше 2 и больше размера массива. " +
                        tryAgain;
 
-        public void ParseArray(string input)
+        private string arraySizeTemplate = "Массив не может состоять из одного элемента. " +
+                       tryAgain;
+
+        public double[] ParseArray(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
                 ValidationMessage = emptyTemplate;
-                return;
+                return null;
             }
 
             input = input.Replace('.', ',').Trim(' ');
 
             string[] tempArray = Regex.Split(input, @"\s+");
-            ParsedArray = new double[tempArray.Length];
+            double[] parsedArray = new double[tempArray.Length];
+            if (parsedArray.Length<2)
+            {
+                ValidationMessage = arraySizeTemplate;
+                return null;
+            }
 
             List<int> errorPositions = new List<int>();
             bool inputErrors = false;
 
             for (int i = 0; i < tempArray.Length; i++)
             {
-                if (!double.TryParse(tempArray[i], out ParsedArray[i]))
+                if (!double.TryParse(tempArray[i], out parsedArray[i]))
                 {
                     inputErrors = true;
                     //converting to count starting with 1
@@ -58,19 +58,38 @@ namespace StatMethods.Parsers
             }
 
             if (inputErrors)
+            {
                 ValidationMessage = string.Format(errorTemplate, string.Join(", ", errorPositions));
+                return null;
+            }
             else
+            {
                 ValidationMessage = "";
+                return parsedArray;
+            }
         }
 
-        public void ParseParameter(string input)
+        public int ParseParameter(string input, int upperLimit)
         {
+            int parameter = -1;
+
             if (!int.TryParse(input, out parameter))
+            {
                 ValidationMessage = parameterTemplate;
-            else if (parameter < 2 || parameter > ParsedArray.Length)
+                return -1;
+            }
+
+            else if (parameter < 2 || parameter > upperLimit)
+            {
                 ValidationMessage = rangeTemplate;
+                return -1;
+            }
+
             else
+            {
                 ValidationMessage = "";
+                return parameter;
+            }
         }
     }
 }

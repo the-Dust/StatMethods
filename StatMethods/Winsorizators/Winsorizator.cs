@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StatMethods.Winsorizators
 {
     class Winsorizator
     {
-        public double FindVinsorizedMedium(double[] inputArray, int winsorization)
+        public double FindWinsorizedMedium(double[] inputArray, int winsorization)
         {
             Array.Sort(inputArray);
             //max and min of input aray
