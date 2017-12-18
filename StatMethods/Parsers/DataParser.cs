@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace StatMethods.Parsers
 {
-    class DataParser
+    public class DataParser
     {
         public string ValidationMessage { get; private set; } = "";
 
@@ -20,7 +20,7 @@ namespace StatMethods.Parsers
                        Environment.NewLine + "не соответствует заданным условиям. " +
                        tryAgain;
 
-        private string rangeTemplate = "Размер окна не может быть меньше 2 и больше размера массива. " +
+        private string rangeTemplate = "Размер параметра не может быть меньше 2 и больше размера массива. " +
                        tryAgain;
 
         private string arraySizeTemplate = "Массив не может состоять из одного элемента. " +

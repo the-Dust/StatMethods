@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StatMethods.MedianFilters
 {
-    class MedianFilter
+    public class MedianFilter
     {
         public double[] GetMedianFiltration(double[] inputArray, int window)
         {

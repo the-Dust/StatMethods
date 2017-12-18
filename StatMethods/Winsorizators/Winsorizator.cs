@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace StatMethods.Winsorizators
 {
-    class Winsorizator
+    public class Winsorizator
     {
         public double FindWinsorizedMedium(double[] inputArray, int winsorization)
         {
